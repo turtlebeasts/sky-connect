@@ -1,12 +1,24 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
+const uploadToCloudinary = require("../utils/uploadToCloudinary");
 
 // POST /api/posts
 const createPost = async (req, res) => {
   try {
-    const { caption, image } = req.body;
+    const { caption } = req.body;
 
-    if (!caption?.trim() && !image?.trim()) {
+    let image = "";
+
+    if (req.file) {
+      const uploadedImage = await uploadToCloudinary(
+        req.file.buffer,
+        "sky-connect/posts",
+      );
+
+      image = uploadedImage.secure_url;
+    }
+
+    if (!caption?.trim() && !image) {
       return res.status(400).json({
         message: "Post must contain a caption or an image",
       });
@@ -14,7 +26,7 @@ const createPost = async (req, res) => {
 
     const post = await Post.create({
       author: req.user._id,
-      caption,
+      caption: caption?.trim() || "",
       image,
     });
 
@@ -23,9 +35,15 @@ const createPost = async (req, res) => {
       "username displayName avatar",
     );
 
-    res.status(201).json({ post: populatedPost });
+    res.status(201).json({
+      post: populatedPost,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
 

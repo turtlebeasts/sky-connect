@@ -1,4 +1,3 @@
-// src/models/Conversation.js
 const mongoose = require("mongoose");
 
 const conversationSchema = new mongoose.Schema(
@@ -12,12 +11,25 @@ const conversationSchema = new mongoose.Schema(
         message: "A conversation must have exactly 2 participants",
       },
     },
+
     lastMessage: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Message",
+      default: null,
+    },
+
+    lastMessageAt: {
+      type: Date,
+      default: null,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+  },
 );
+
+conversationSchema.index({
+  participants: 1,
+});
 
 module.exports = mongoose.model("Conversation", conversationSchema);

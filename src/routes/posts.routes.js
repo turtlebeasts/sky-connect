@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+const upload = require("../middleware/upload");
 const authMiddleware = require("../middleware/auth");
 
 const {
@@ -20,7 +21,7 @@ router.get("/user/:username", getUserPosts);
 router.get("/:id", getPostById);
 
 // Protected Routes
-router.post("/", authMiddleware, createPost);
+router.post("/", authMiddleware, upload.single("image"), createPost);
 router.patch("/:id", authMiddleware, updatePost);
 router.delete("/:id", authMiddleware, deletePost);
 router.post("/:id/like", authMiddleware, likePost);

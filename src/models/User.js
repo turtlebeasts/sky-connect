@@ -53,7 +53,7 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default:
-        "https://res.cloudinary.com/demo/image/upload/default-avatar.png",
+        "https://res.cloudinary.com/dylkpb62u/image/upload/v1784128614/wanderercreative-blank-profile-picture-973460_mvgwfa.svg",
     },
     bio: {
       type: String,
