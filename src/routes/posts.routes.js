@@ -22,7 +22,7 @@ router.get("/:id", getPostById);
 
 // Protected Routes
 router.post("/", authMiddleware, upload.single("image"), createPost);
-router.patch("/:id", authMiddleware, updatePost);
+router.patch("/:id", authMiddleware, upload.single("image"), updatePost);
 router.delete("/:id", authMiddleware, deletePost);
 router.post("/:id/like", authMiddleware, likePost);
 router.delete("/:id/like", authMiddleware, unlikePost);

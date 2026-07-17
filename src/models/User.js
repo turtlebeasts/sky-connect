@@ -25,6 +25,18 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       select: false,
+      validate: {
+        validator: function (value) {
+          // Local accounts require a password
+          if (this.authProvider === "local") {
+            return !!value;
+          }
+
+          // OAuth accounts don't
+          return true;
+        },
+        message: "Password is required for local accounts.",
+      },
     },
     authProvider: {
       type: String,
